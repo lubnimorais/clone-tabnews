@@ -25,8 +25,6 @@ describe("POST to /api/v1/migrations", () => {
 
     expect(response2.status).toBe(200);
 
-    console.log("");
-
     const response2Body = await response2.json();
 
     expect(Array.isArray(response2Body)).toBe(true);

@@ -14,8 +14,6 @@ describe("GET to /api/v1/migrations", () => {
 
     const responseBody = await response.json();
 
-    // console.log(responseBody.length);
-
     expect(Array.isArray(responseBody)).toBe(true);
     expect(responseBody.length).toBeGreaterThan(0);
   });
