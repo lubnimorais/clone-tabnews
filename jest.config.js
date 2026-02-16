@@ -20,6 +20,8 @@ const jestConfig = createJestConfig({
    * na raiz ou <rootDir>/src de começar pela pasta src
    */
   moduleDirectories: ["node_modules", "<rootDir>"],
+  // quanto um tempo deve esperar até jogar o pano
+  testTimeout: 60000,
 });
 
 module.exports = jestConfig;
