@@ -1,4 +1,4 @@
-name: Automated Tests
+name: Linting
 
 # Qual evento o workflow vai ficar observando acontecer
 # O on aceita array [push, pull_request]
@@ -7,9 +7,9 @@ on: pull_request
 # Qual jobs (trabalho(s)) o workflow vai executar
 jobs:
   # chave do trabalho
-  jest:
+  prettier:
     # definindo o nome do trabalho
-    name: Jest Ubuntu
+    name: Prettier
     # quem vai rodar os comandos
     runs-on: ubuntu-latest
     # definir os passos que serão rodados
@@ -42,4 +42,4 @@ jobs:
       # a certeza que sempre vai ser utilizada a mesma dependência.
       - run: npm ci
 
-      - run: npm run test
+      - run: npm run lint:prettier:check
