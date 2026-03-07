@@ -81,3 +81,41 @@ jobs:
       - run: npm ci
 
       - run: npm run lint:eslint:check
+  commitlint:
+    # definindo o nome do trabalho
+    name: Commitlint
+    # quem vai rodar os comandos
+    runs-on: ubuntu-latest
+    # definir os passos que serão rodados
+    # definir uma lista de passos
+    steps:
+      # puxar o código do projeto para o ambiente
+      # vamos definir o uses (usar)
+      - uses: actions/checkout@v4 # recurso poderoso para baixar nosso código para o ambiente de trabalho
+        with:
+          fetch-depth: 0
+
+      # action de configuração do NodeJS
+      - uses: actions/setup-node@v4
+        # definir a versão do node
+        with:
+          node-version: "lts/hydrogen"
+
+      # executar os comandos dentro do ambiente
+
+      # instalar as dependências
+      # Porque ci e não install?
+      # Npm install resolve (recalcula) as dependências encontradas no package.json
+      # se no meio do caminho as dependências e as dependências das dependências
+      # receberam atualizações e não são supostamente break changing, ele vai pegar
+      # essas versões e utilizar elas alterando talvez o comportamento da aplicação
+      # Npm ci não faz isso. Ele vai estritamente utilizar o que estiver declarado
+      # de forma congelada no package-lock.json. Isso significa que se rodar os comandos
+      # em paralelo ao longo do tempo o npm ci sempre vai devolver o mesmo resultado
+      # enquanto o npm install não. Ele vai devolver resultados talvez diferentes
+      # com pacotes diferentes mais atualizados se isso acontecer no meio do caminho
+      # Por isso é extremamente importante fazer o commit do package-lock.json para ter
+      # a certeza que sempre vai ser utilizada a mesma dependência.
+      - run: npm ci
+
+      - run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
