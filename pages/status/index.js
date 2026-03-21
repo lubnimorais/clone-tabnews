@@ -13,7 +13,7 @@ export default function StatusPage() {
       <h1>Status</h1>
 
       <UpdatedAt />
-      <Dependencies />
+      <DatabaseStatus />
     </>
   );
 }
@@ -36,7 +36,7 @@ function UpdatedAt() {
   return <div>Última atualização: {updatedAtText}</div>;
 }
 
-function Dependencies() {
+function DatabaseStatus() {
   /**
    * A CHAVE PASSADA NO SWR PODE SER PASSADA
    * COMO PRIMEIRO PARÂMETRO DA FUNÇÃO
@@ -45,20 +45,26 @@ function Dependencies() {
     refreshInterval: 2000,
   });
 
+  let databaseStatusInformation = "Carregando...";
+
   if (!isLoading && data) {
+    databaseStatusInformation = (
+      <>
+        <div>Versão: {data.dependencies.database.version}</div>
+        <div>
+          Conexões abertas: {data.dependencies.database.opened_connections}
+        </div>
+        <div>
+          Conexões permitidas: {data.dependencies.database.max_connections}
+        </div>
+      </>
+    );
+
     return (
-      <div>
-        <span>Database:</span>
-        <ul style={{ listStyle: "none", marginTop: 0 }}>
-          <li>Versão: {data.dependencies.database.version}</li>
-          <li>
-            Conexões abertas: {data.dependencies.database.opened_connections}
-          </li>
-          <li>
-            Conexões permitidas: {data.dependencies.database.max_connections}
-          </li>
-        </ul>
-      </div>
+      <>
+        <h2>Database</h2>
+        <div>{databaseStatusInformation}</div>
+      </>
     );
   }
 }
