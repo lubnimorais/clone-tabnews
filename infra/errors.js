@@ -56,6 +56,67 @@ export class ServiceError extends Error {
   }
 }
 
+export class ValidationError extends Error {
+  constructor({ cause, message, action }) {
+    super(message || "Um erro de validação ocorreu.", { cause });
+
+    this.name = "ValidationError";
+    this.action = action || "Ajuste os dados enviados e tente novamente.";
+    this.statusCode = 400;
+  }
+
+  /**
+   * SOBRESCREVER O COMPORTAMENTO QUANDO É PEDIDO PARA TRANSFORMAR
+   * ESSE OBJETO EM UM JSON. E PARA ISSO DECLARAMOS UM NOVO MÉTODO
+   * NESSA CLASSE CHAMADO toJSON(). E O QUE FOR DEVOLVIDO DENTRO,
+   * É O QUE VAI APARECER NO RESULTADO DO STRINGFY.
+   *
+   * this.name -> VAI RETORNAR O VALOR QUE FOI HERDADO, NESSE CASO
+   * 'Error'. MAS SE QUISERMOS DEFINIR 'InternalServerError' PRECISAMOS
+   * SOBRESCREVER ESSA PROPRIEDADE
+   */
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      action: this.action,
+      status_code: this.statusCode,
+    };
+  }
+}
+
+export class NotFoundError extends Error {
+  constructor({ cause, message, action }) {
+    super(message || "Não foi possível encontrar esse recurso no sistema.", {
+      cause,
+    });
+
+    this.name = "NotFoundError";
+    this.action =
+      action || "Verifique se os parâmetros enviados na consulta estão certos.";
+    this.statusCode = 404;
+  }
+
+  /**
+   * SOBRESCREVER O COMPORTAMENTO QUANDO É PEDIDO PARA TRANSFORMAR
+   * ESSE OBJETO EM UM JSON. E PARA ISSO DECLARAMOS UM NOVO MÉTODO
+   * NESSA CLASSE CHAMADO toJSON(). E O QUE FOR DEVOLVIDO DENTRO,
+   * É O QUE VAI APARECER NO RESULTADO DO STRINGFY.
+   *
+   * this.name -> VAI RETORNAR O VALOR QUE FOI HERDADO, NESSE CASO
+   * 'Error'. MAS SE QUISERMOS DEFINIR 'InternalServerError' PRECISAMOS
+   * SOBRESCREVER ESSA PROPRIEDADE
+   */
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      action: this.action,
+      status_code: this.statusCode,
+    };
+  }
+}
+
 export class MethodNotAllowedError extends Error {
   constructor() {
     super("Método não permitido para este endpoint.");
