@@ -117,6 +117,37 @@ export class NotFoundError extends Error {
   }
 }
 
+export class UnauthorizedError extends Error {
+  constructor({ cause, message, action }) {
+    super(message || "Usuário não autenticado.", {
+      cause,
+    });
+
+    this.name = "UnauthorizedError";
+    this.action = action || "Faça novamente o login para continuar.";
+    this.statusCode = 401;
+  }
+
+  /**
+   * SOBRESCREVER O COMPORTAMENTO QUANDO É PEDIDO PARA TRANSFORMAR
+   * ESSE OBJETO EM UM JSON. E PARA ISSO DECLARAMOS UM NOVO MÉTODO
+   * NESSA CLASSE CHAMADO toJSON(). E O QUE FOR DEVOLVIDO DENTRO,
+   * É O QUE VAI APARECER NO RESULTADO DO STRINGFY.
+   *
+   * this.name -> VAI RETORNAR O VALOR QUE FOI HERDADO, NESSE CASO
+   * 'Error'. MAS SE QUISERMOS DEFINIR 'InternalServerError' PRECISAMOS
+   * SOBRESCREVER ESSA PROPRIEDADE
+   */
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      action: this.action,
+      status_code: this.statusCode,
+    };
+  }
+}
+
 export class MethodNotAllowedError extends Error {
   constructor() {
     super("Método não permitido para este endpoint.");
