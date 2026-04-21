@@ -8,6 +8,8 @@ import migrator from "models/migrator";
 
 import user from "models/user";
 
+import session from "models/session";
+
 // AGUARDAR POR TODOS OS SERVIÇOS ESTAREM PRONTOS
 async function waitForServices() {
   await waitForWebServer();
@@ -55,11 +57,16 @@ async function createUser(userObject) {
   });
 }
 
+async function createSession(userId) {
+  return await session.create(userId);
+}
+
 const orchestrator = {
   waitForServices,
   clearDatabase,
   runPendingMigrations,
   createUser,
+  createSession,
 };
 
 export default orchestrator;
