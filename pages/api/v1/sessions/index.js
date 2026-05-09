@@ -8,7 +8,11 @@ import session from "models/session";
 
 const router = createRouter();
 
-router.post(postHandler);
+// MIDDLEWARE
+router.use(controller.injectAnonymousOrUser);
+
+// ROTAS
+router.post(controller.canRequest("create:session"), postHandler);
 router.delete(deleteHandler);
 
 export default router.handler(controller.errorHandlers);
