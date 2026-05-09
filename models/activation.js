@@ -4,6 +4,7 @@ import webserver from "infra/webserver";
 
 import email from "infra/email";
 import { NotFoundError } from "infra/errors";
+import user from "./user";
 
 const EXPIRATION_IN_MILLISECONDS = 60 * 15 * 1000; // 15 minutes
 
@@ -65,6 +66,37 @@ async function findOneValidById(tokenId) {
   }
 }
 
+async function markTokenAsUsed(activationTokenId) {
+  const usedActivationToken = await runUpdateQuery(activationTokenId);
+
+  return usedActivationToken;
+
+  async function runUpdateQuery(activationTokenId) {
+    const results = await database.query({
+      text: `
+        UPDATE
+          user_activation_tokens
+        SET
+          used_at = timezone('utc', now()),
+          updated_at = timezone('utc', now())
+        WHERE
+          id = $1
+        RETURNING
+          *
+      `,
+      values: [activationTokenId],
+    });
+
+    return results.rows[0];
+  }
+}
+
+async function activeUserByUserId(userId) {
+  const activateUser = await user.setFeatures(userId, ["create:session"]);
+
+  return activateUser;
+}
+
 async function sendEmailToUser(user, activationToken) {
   await email.send({
     from: "TabCode <contato@tabcode.com.br>",
@@ -83,6 +115,8 @@ const activation = {
   create,
   findOneValidById,
   sendEmailToUser,
+  markTokenAsUsed,
+  activeUserByUserId,
 };
 
 export default activation;
