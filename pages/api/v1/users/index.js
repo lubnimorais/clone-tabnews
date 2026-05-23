@@ -4,6 +4,7 @@ import controller from "infra/controller";
 
 import user from "models/user";
 import activation from "models/activation";
+import authorization from "models/authorization";
 
 const router = createRouter();
 
@@ -13,6 +14,8 @@ router.post(controller.canRequest("create:user"), postHandler);
 export default router.handler(controller.errorHandlers);
 
 async function postHandler(request, response) {
+  const userTryingToPost = request.context.user;
+
   const userInputValues = request.body;
 
   const newUser = await user.create(userInputValues);
@@ -20,5 +23,11 @@ async function postHandler(request, response) {
   const activationToken = await activation.create(newUser.id);
   await activation.sendEmailToUser(newUser, activationToken);
 
-  return response.status(201).json(newUser);
+  const secureOutputValues = authorization.filterOutput(
+    userTryingToPost,
+    "read:user",
+    newUser,
+  );
+
+  return response.status(201).json(secureOutputValues);
 }
