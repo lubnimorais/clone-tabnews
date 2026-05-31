@@ -23,7 +23,7 @@ jobs:
       - uses: actions/setup-node@v4
         # definir a versão do node
         with:
-          node-version: "lts/hydrogen"
+          node-version-file: "package.json"
 
       # executar os comandos dentro do ambiente
 
@@ -61,7 +61,7 @@ jobs:
       - uses: actions/setup-node@v4
         # definir a versão do node
         with:
-          node-version: "lts/hydrogen"
+          node-version-file: "package.json"
 
       # executar os comandos dentro do ambiente
 
@@ -99,7 +99,7 @@ jobs:
       - uses: actions/setup-node@v4
         # definir a versão do node
         with:
-          node-version: "lts/hydrogen"
+          node-version-file: "package.json"
 
       # executar os comandos dentro do ambiente
 
