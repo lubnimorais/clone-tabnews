@@ -113,7 +113,7 @@ async function activeUserByUserId(userId) {
 
 async function sendEmailToUser(user, activationToken) {
   await email.send({
-    from: "TabCode <lubnidev@gmail.com>",
+    from: "TabCode <contato@tabcode.com.br>",
     to: user.email,
     subject: "Ative seu cadastro no FinTab!",
     text: `${user.username}, clique no link abaixo para ativar seu cadastro no TabCode:

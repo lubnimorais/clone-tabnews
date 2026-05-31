@@ -48,7 +48,7 @@ describe("Use case: Registration flow (all successful)", () => {
   test("Receive activation email", async () => {
     const lastEmail = await orchestrator.getLastEmail();
 
-    expect(lastEmail.sender).toBe("<lubnidev@gmail.com>");
+    expect(lastEmail.sender).toBe("<contato@tabcode.com.br>");
     expect(lastEmail.recipients[0]).toBe("<registration.flow@test.com>");
     expect(lastEmail.subject).toBe("Ative seu cadastro no FinTab!");
     expect(lastEmail.text).toContain("RegistrationFlow");
