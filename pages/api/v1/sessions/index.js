@@ -8,21 +8,17 @@ import session from "models/session";
 
 import { ForbiddenError } from "infra/errors";
 
-const router = createRouter();
-
-// MIDDLEWARE
-router.use(controller.injectAnonymousOrUser);
-
-// ROTAS
-router.post(controller.canRequest("create:session"), postHandler);
-router.delete(deleteHandler);
-
-export default router.handler(controller.errorHandlers);
+export default createRouter()
+  .use(controller.injectAnonymousOrUser) // MIDDLEWARE
+  // ROTAS
+  .post(controller.canRequest("create:session"), postHandler)
+  .delete(deleteHandler)
+  .handler(controller.errorHandlers);
 
 async function postHandler(request, response) {
   const userInputValues = request.body;
 
-  const authenticatedUser = await authentication.getAuthenticateUser(
+  const authenticatedUser = await authentication.getUser(
     userInputValues.email,
     userInputValues.password,
   );
