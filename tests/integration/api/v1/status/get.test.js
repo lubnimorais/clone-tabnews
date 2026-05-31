@@ -4,6 +4,8 @@ import webserver from "infra/webserver";
 
 beforeAll(async () => {
   await orchestrator.waitForServices();
+  await orchestrator.clearDatabase();
+  await orchestrator.runPendingMigrations();
 });
 
 describe("GET /api/v1/status", () => {
