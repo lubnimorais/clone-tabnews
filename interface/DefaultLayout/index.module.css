@@ -1,0 +1,5 @@
+.smallContent {
+  max-width: 20rem;
+  /* CENTRALIZAR O CONTEÚDO */
+  margin-inline: auto;
+}
